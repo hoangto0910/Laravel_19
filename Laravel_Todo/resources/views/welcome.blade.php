@@ -64,6 +64,11 @@
         </style>
     </head>
     <body>
+        <form action="/update" method="POST">
+            {{ csrf_field() }}
+            <input type="text">
+            <input type="submit" value="submit">
+        </form>
         <ul>
             <li>Họ và tên: Đặng Tô Hoàng</li>
             <li>Năm sinh: 1998</li>
