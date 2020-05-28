@@ -17,86 +17,73 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/link/welcome', function () {
-//     return view('welcome2');
-// })->name("view2");
-
-// Route::get('/abc', function () {
-//     return view('welcome');
-// });
-
-// Route::post('/update', function () {
-//     dd("ok"); // dump die
-// });
-
-// // Route::get('/user/{id}', function ($id) {
-// //     dd("Id la : " . $id);
-// // });
-
-// Route::get('/user/{id?}', function ($id = null) {
-// 	if ($id == null) {
-// 		return "List user";
-// 	}
-//     return ("Id la : " . $id);
-// });
-
-// // Route::get('/user/{id}/post/{post_id}/postname/{post_name}', function ($id, $postId, $postName) {
-// //     return ("Id : " . $id . ", Post id : $postId, Postname : $postName");
-// // });
-
-// Route::get('/user/{id}/post/{post_id}/postname/{post_name?}', function ($id, $postId, $postName = null) {
-// 	if ($postName == null) {
-// 		return "Default";
-// 	}
-//     return ("Id : " . $id . ", Post id : $postId, Postname : $postName");
-// });
-
-// // router name (link khac doc)
-// // Group
-// Route::prefix("admin")->group(function(){
-// 	Route::prefix("user")->group(function(){
-// 		Route::get("/", function(){
-// 			dd("user index");
-// 		})->name("admin.user.inder");
-// 		Route::get("create", function(){
-// 			dd("user create");
-// 		});
-// 		Route::get("update", function(){
-// 			dd("user update");
-// 		});
-// 	});
-// });
-
-// Route::prefix("admin")->group(function(){
-// 	Route::prefix("post")->group(function(){
-// 		Route::get("/", function(){
-// 			dd("post index");
-// 		});
-// 		Route::get("create", function(){
-// 			dd("post create");
-// 		});
-// 		Route::get("update", function(){
-// 			dd("post update");
-// 		});
-// 	});
-// });
-
-
 // Homework
 Route::get("homework", function(){
 	return view("homework");
 });
-Route::prefix("task")->group(function(){
-	Route::get("complete/3", function(){
-		// setcookie("success", "Đã Hoàn thành", time()+5);
-		// return redirect('homework');
-		return ("Đã hoàn Thành công việc");
-	})->name("todo.task.complete");
-	Route::get("reset/3", function(){
-		return ("Đã Lưu để làm lại công việc");
-	})->name("todo.task.reset");
-	Route::get("delete/3", function(){
-		return ("Day la tinh nang Delete");
-	})->name("todo.task.delete");
+Route::group(["name" => "todo.task.", "prefix" => "task" , "namespace" => "backend\user"], function(){
+	Route::get("complete/{id?}", function($id = null){ //optional param de cuoi uri
+		if ($id == null) {
+			dd("Khong ton tai cong viec");
+		}else{
+			return ("Đã hoàn Thành công việc co id la : $id");			
+		}
+	})->name("complete");
+	Route::get("reset/{id?}", function($id = null){
+		if ($id == null) {
+			dd("Khong ton tai cong viec");
+		}else{
+			return ("Đã Lưu để làm lại công việc co id la : $id");
+		}
+	})->name("reset");
+	Route::get("delete/{id?}", function($id = null){
+		if ($id == null) {
+			dd("Khong ton tai cong viec");
+		}else{
+			return ("Day la tinh nang Delete co id la : $id");
+		}
+	})->name("delete");
 });
-	
+//namespace di tu Controller, chen yield mo section
+
+// Homework Unit03
+Route::get("profile", function(){
+	return view("profile", [
+		'name' => "Đặng Tô Hoàng",
+		'year' => "1998",
+		'school' => "KT - Kỹ Thuật Công Nghiệp",
+		'country' => "Hải Dương",
+		'introduce' => "<div style='color : red'><b><i>Hello, I'm Hoàng, I'm 22 years old...</i></b></div>",
+		'muctieu' => "Become Lập trình viên php",
+	]);
+});
+Route::get("listmanager", function(){
+	$lists = [
+        [
+            'name' => 'Học View trong Laravel',
+            'status' => 0
+        ],
+        [
+            'name' => 'Học Route trong Laravel',
+            'status' => 1
+        ],
+        [
+            'name' => 'Làm bài tập View trong Laravel',
+            'status' => -1
+        ],
+        [
+            'name' => 'Làm bài tập Layouts trong Laravel',
+            'status' => 0
+        ],
+        [
+            'name' => 'Làm bài tập Route trong Laravel',
+            'status' => 1
+        ],
+    ];
+	return view("list", [
+		"lists" => $lists,
+	]);
+});
+Route::get('home', function() {
+    return view("home");
+});
