@@ -58,7 +58,7 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        return view("Taskview.edit");
+        dd(" edit id : $id");
     }
 
     /**
@@ -70,7 +70,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return view("Taskview.update");
+        dd(" Update id : $id");
     }
 
     /**
