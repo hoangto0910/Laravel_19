@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,26 +24,41 @@
         <br><br>
 		<table class="table table-bordered">
             <thead class="thead-light">
-                <th colspan="3">Danh sách công việc hiện tại </th>
+                <th colspan="5">Danh sách công việc hiện tại </th>
             </thead>
             <tbody>
             	<tr>
-            		<td colspan="3">Tên công việc</td>
+            		<td colspan="5">Tên công việc</td>
             	</tr>
             	<tr>
-            		<td>Làm bài tập Laravel</td>
-            		<td width="10%"><a href="{{ route('todo.task.complete') }}" class="btn btn-success">Hoàn Thành</a></td>
-            		<td width="10%"><a href="{{ route('todo.task.delete') }}" class="btn btn-danger">Xóa</a></td>
+                    <form action="{{ route('tasks.store') }}" method="post" >
+                        {{ csrf_field() }}
+                		<td><input type="text" value="{{ $listname["cv1"]['name'] }}" name="name"></td>
+                        <td width="15%"><input type="text" value="{{ $listname["cv1"]['deadline'] }}" name="deadline"></td>
+                		<td width="10%"><input type="submit" class="btn btn-primary"></td>
+                    </form>
+                    <td width="10%"><a href="{{ route('taskcpl', $listname["cv1"]["id"]) }}" class="btn btn-success">Hoàn Thành</a></td>
+            		<td width="10%"><a href="{{ route('tasks.destroy', $listname["cv1"]["id"]) }}" class="btn btn-danger">Xóa</a></td>
             	</tr>
             	<tr>
-            		<td>Làm bài tập PHP</td>
-            		<td width="10%"><a href="{{ route('todo.task.complete') }}" class="btn btn-success">Hoàn Thành</a></td>
-            		<td width="10%"><a href="{{ route('todo.task.delete') }}" class="btn btn-danger">Xóa</a></td>
+                    <form action="{{ route('tasks.store') }}" method="post" >
+                        {{ csrf_field() }}
+                		<td><input type="text" value="{{ $listname["cv2"]['name'] }}" name="name"></td>
+                        <td width="15%"><input type="text" value="{{ $listname["cv2"]['deadline'] }}" name="deadline"></td>
+                		<td width="10%"><input type="submit" class="btn btn-primary"></td>
+                    </form>
+                    <td width="10%"><a href="{{ route('taskcpl', $listname["cv2"]["id"]) }}" class="btn btn-success">Hoàn Thành</a></td>
+            		<td width="10%"><a href="{{ route('tasks.destroy', $listname["cv2"]["id"]) }}{{-- {{ route('todo.task.delete') }} --}}" class="btn btn-danger">Xóa</a></td>
             	</tr>
             	<tr>
-            		<td>Làm Project Laravel</td>
-            		<td width="10%"><a href="{{ route('todo.task.reset') }}" class="btn btn-success">Làm Lại</a></td>
-            		<td width="10%"><a href="{{ route('todo.task.delete') }}" class="btn btn-danger">Xóa</a></td>
+                    <form action="{{ route('tasks.store') }}" method="post" >
+                        {{ csrf_field() }}
+                		<td><input type="text" value="{{ $listname["cv3"]['name'] }}" name="name"></td>
+                        <td width="15%"><input type="text" value="{{ $listname["cv3"]['deadline'] }}" name="deadline"></td>
+                        <td width="10%"><input type="submit" class="btn btn-primary"></td>
+                    </form>
+            		<td width="10%"><a href="{{ route('taskrpl', $listname["cv3"]["id"]) }}" class="btn btn-success">Làm Lại</a></td>
+            		<td width="10%"><a href="{{ route('tasks.destroy', $listname["cv3"]["id"]) }}" class="btn btn-danger">Xóa</a></td>
             	</tr>
             </tbody>
         </table>

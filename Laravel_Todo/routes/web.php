@@ -19,9 +19,28 @@ Route::get('/', function () {
 
 // Homework
 Route::get("homework", function(){
-	return view("homework");
+	$listname = array(
+		"cv1" => array(
+			"id" => 1,
+			"name" => "Làm Bài Tập Laravel",
+			"deadline" => "31/5/2020"
+		),
+		"cv2" => array(
+			"id" => 2,
+			"name" => "Làm Bài Tập Php",
+			"deadline" => "20/5/2020"
+		),
+		"cv3" => array(
+			"id" => 3,
+			"name" => "Làm Project Laravel",
+			"deadline" => "30/5/2020"
+		),
+	);
+	return view("homework", [
+		"listname" => $listname
+	]);
 });
-Route::group(["name" => "todo.task.", "prefix" => "task" , "namespace" => "backend\user"], function(){
+Route::group(["as" => "todo.task.", "prefix" => "tasks" , "namespace" => "frontend"], function(){
 	Route::get("complete/{id?}", function($id = null){ //optional param de cuoi uri
 		if ($id == null) {
 			dd("Khong ton tai cong viec");
@@ -43,6 +62,7 @@ Route::group(["name" => "todo.task.", "prefix" => "task" , "namespace" => "backe
 			return ("Day la tinh nang Delete co id la : $id");
 		}
 	})->name("delete");
+	// Route::post("store", "TaskController@store")->name("store");
 });
 //namespace di tu Controller, chen yield mo section
 
@@ -87,3 +107,17 @@ Route::get("listmanager", function(){
 Route::get('home', function() {
     return view("home");
 });
+
+// 4
+Route::group(["prefix" => "task", "name" => "task.", "namespace" => "frontend"], function(){
+	Route::get("/", "TaskController@index");
+	Route::get("create", "TaskController@create");
+	Route::get("destroy/{id?}", "TaskController@destroy");
+	Route::get("edit", "TaskController@edit");
+	Route::get("show", "TaskController@show");
+	Route::get("store", "TaskController@store")->name("store");
+	Route::get("update", "TaskController@update");
+});
+Route::resource("tasks", "frontend\TaskController");
+Route::get("taskcpl/{id?}", "frontend\TaskController@complete")->name("taskcpl");
+Route::get("taskrpl/{id?}", "frontend\TaskController@reComplete")->name("taskrpl");
