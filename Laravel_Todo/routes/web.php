@@ -111,7 +111,7 @@ Route::get('home', function() {
 // 4
 
 
-Route::group(["prefix" => "task", "name" => "task.", "namespace" => "frontend"], function(){
+Route::group(["prefix" => "task", "as" => "task.", "namespace" => "frontend"], function(){
 	Route::get("/", "TaskController@index");
 	Route::get("create", "TaskController@create");
 	Route::get("destroy/{id?}", "TaskController@destroy");
@@ -125,3 +125,5 @@ Route::group(["prefix" => "task", "name" => "task.", "namespace" => "frontend"],
 Route::resource("tasks", "frontend\TaskController");
 Route::get("taskcpl/{id?}", "frontend\TaskController@complete")->name("taskcpl");
 Route::get("taskrpl/{id?}", "frontend\TaskController@reComplete")->name("taskrpl");
+
+//5

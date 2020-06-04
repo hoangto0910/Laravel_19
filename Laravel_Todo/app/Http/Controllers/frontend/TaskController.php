@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\frontend;
-
+use App\Models\Task;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return view("Taskview.index");
+        $tasks = Task::all();
+        return view('Taskmanager.indexTask', ['tasks' => $tasks]);
     }
 
     /**
@@ -24,7 +25,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return view("Taskview.create");
+        return view("Taskmanager.createTask");
     }
 
     /**
@@ -35,7 +36,15 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $taskModel = new Task();
+        $taskModel->name = $request->name;
+        $taskModel->content = $request->content;
+        $taskModel->deadline = $request->deadline;
+        $taskModel->status = $request->status;
+        // dd($taskModel);
+        $taskModel->save();
+        setcookie('msg', 'Thêm thành công', time() + 4);
+        return redirect(route('tasks.index'));
     }
 
     /**
@@ -47,7 +56,7 @@ class TaskController extends Controller
     public function show($id)
     {
         // return view("Taskview.show");
-        dd($id);
+        dd("show ". $id);
     }
 
     /**
@@ -81,7 +90,10 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        dd($id);
+        $task = Task::find($id);
+        $task->delete();
+        setcookie("msg", "Xóa Thành công", time() + 4);
+        return redirect(route('tasks.index'));        
     }
 
     public function complete($id){
