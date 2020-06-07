@@ -1,40 +1,66 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>DevMind - Education And Technology Group</title>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<div class="container">
+        @extends('includes.master')
+        @section('content')
+    <div class="col-sm-offset-2 col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Thêm công việc mới
+            </div>
+            <div class="panel-body">
+                <!-- New Task Form -->
+                <form
+                        action="{{ route('tasks.store')  }}"
+                        method="POST" class="form-horizontal">
+                {{ csrf_field() }}
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+                <!-- Task Name -->
+                    <input type="hidden" value="1" name="status">
+                    <div class="form-group">
+                        <label for="task-name" class="col-sm-3 control-label">Tên công việc</label>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-</head>
-<body>
-    <div class="container">
-    <h3 align="center">DevMind - Education And Technology Group</h3>
-    <h3 align="center">Add New Task</h3>
-    <hr>
-        <form action="{{ route('tasks.store') }}" method="post">
-            {{ csrf_field() }}
-            <input type="hidden" name="status" value="1">
-            <div class="form-group">
-                <label for="">Tên công việc</label>
-                <input type="text" class="form-control" id="" placeholder="" name="name">
+                        <div class="col-sm-6">
+                            <input type="text" name="name" id="task-name" class="form-control" value="{{ old('name') }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-name" class="col-sm-3 control-label">Mô tả</label>
+
+                        <div class="col-sm-6">
+                            <textarea name="content" class="form-control">{{ old('content') }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-name" class="col-sm-3 control-label">Thời hạn hoàn thành</label>
+
+                        <div class="col-sm-6">
+                            <input type="datetime-local" name="deadline" id="task-deadline" class="form-control" value="{{ old('deadline') }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-name" class="col-sm-3 control-label">Mức độ ưu tiên</label>
+
+                        <div class="col-sm-6">
+                            <select name="priority" class="col-sm-3 control-label form-control" id="">
+                                <option value="0">Bình Thường</option>
+                                <option value="1">Quan trọng</option>
+                                <option value="2">Khẩn cấp</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Add Task Button -->
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-6">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fa fa-btn fa-plus"></i>Thêm công việc
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="">Mô tả công việc</label>
-                <input type="text" class="form-control" id="" placeholder="" name="content">
-            </div>
-            <div class="form-group">
-                <label for="">Thời hạn công việc</label>
-                <input type="text" class="form-control" id="" placeholder="" name="deadline">
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
+        </div>
     </div>
-</body>
-</html>
+    @endsection
+    </div>
+{{-- </body>
+</html> --}}

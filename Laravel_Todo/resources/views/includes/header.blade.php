@@ -1,4 +1,4 @@
-<style>
+{{-- <style>
 	.header{
 		background-color: lavender;
 		width: 100%;
@@ -7,4 +7,4 @@
 		font-style: italic;
 	}
 </style>
-<div class="header text-center">Welcome</div>
+<div class="header text-center">Welcome</div> --}}

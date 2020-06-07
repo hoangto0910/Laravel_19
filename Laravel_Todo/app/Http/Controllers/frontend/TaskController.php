@@ -41,6 +41,7 @@ class TaskController extends Controller
         $taskModel->content = $request->content;
         $taskModel->deadline = $request->deadline;
         $taskModel->status = $request->status;
+        $taskModel->priority = $request->priority;
         // dd($taskModel);
         $taskModel->save();
         setcookie('msg', 'Thêm thành công', time() + 4);
@@ -56,7 +57,10 @@ class TaskController extends Controller
     public function show($id)
     {
         // return view("Taskview.show");
-        dd("show ". $id);
+        $task = Task::find($id);
+        return view('Taskmanager.show', [
+            'task' => $task
+        ]);
     }
 
     /**
@@ -67,7 +71,10 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        dd(" edit id : $id");
+        $task = Task::find($id);
+        return view("Taskmanager.edit", [
+            'task' => $task
+        ]);
     }
 
     /**
@@ -79,7 +86,15 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd(" Update id : $id");
+        $task = Task::find($id);
+        $task->name = $request->name;
+        $task->status = $request->status;
+        $task->deadline = $request->deadline;
+        $task->content = $request->content;
+        $task->priority = $request->priority;
+        $task->save();
+        setcookie('msg', "Sửa thành công", time() + 4);
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -97,11 +112,22 @@ class TaskController extends Controller
     }
 
     public function complete($id){
-        echo "Hoàn Thành công việc có id là : $id";
+        $task = Task::find($id); // Lay ra 1 ban ghi anh xa lai 1 model , Goi den cac Key nhu 1 thuoc tinh
+        // dd($task);
+        if ($task->status == 1) {
+            $task->status = 2;
+        }
+        $task->save();
+        return redirect()->route('tasks.index');
     }
 
     public function reComplete($id){
-        echo "Làm lại công việc có id là : $id";
+        $task = Task::find($id);
+        if ($task->status == 2) {
+            $task->status = 1;
+        }
+        $task->save();
+        return redirect()->route('tasks.index');
     }
 
 }

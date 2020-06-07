@@ -1,4 +1,4 @@
-<style>
+{{-- <style>
 	.footer{
 		width: 100%;
 		background-color: pink;
@@ -7,4 +7,4 @@
 		font-style: italic;
 	}
 </style>
-<div class="footer text-center">MyLaravel19.com</div>
+<div class="footer text-center">MyLaravel19.com</div> --}}

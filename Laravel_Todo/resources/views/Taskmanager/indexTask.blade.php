@@ -1,70 +1,149 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Work Manager</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Laravel Todo - Basic</title>
+
+    <!-- Fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
+
+    <!-- Styles -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
+
+    <style>
+        body {
+            font-family: 'Lato';
+        }
+        .fa-btn {
+            margin-right: 1px;
+        }
+        .task-table tbody tr td:nth-child(2){
+            width: 120px;
+        }
+        .task-table tbody tr td:nth-child(3){
+            width: 100px;
+        }
+    </style>
 </head>
-<body>
-	<div class="container">
-		<h3 class="text-center">--- Ứng dụng quản lý công việc ---</h3>
-		<br>
-		<table class="table table-bordered">
-            <thead class="thead-light">
-                <th colspan="3">Thêm công việc mới </th>
-            </thead>
-            <tbody>
-            	<tr>
-            		<td width="10%" colspan="3"><a href="{{ route('tasks.create') }}" class="btn btn-success">Thêm công việc mới</a></td>
-            	</tr>
-            </tbody>
-        </table>
-        <br><br>
-            @if (isset($_COOKIE["msg"])) 
-            	<div class="alert alert-success" role="alert">
-            		<strong>Success !!!</strong>
-            		{{
-            			$_COOKIE["msg"] 
-            		}}
-            	</div>
-			@endif
-		<table class="table table-bordered">
-            <thead class="thead-light">
-                <th colspan="7">Danh sách công việc hiện tại </th>
-            </thead>
-            <tbody>
-            	<tr class="text-center">
-            		<td>ID</td>
-            		<td>Tên Công việc</td>
-            		<td>Mô tả Công việc</td>
-            		<td>Deadline</td>
-            		<td>Status</td>
-            		<td colspan="2">Chức năng</td>
-            	</tr>
-            	@foreach ($tasks as $task)          	
-            	<tr class="text-center">
-            		<td width="5%" >{{ $task['id'] }}</td>
-            		<td>{{ $task['name'] }}</td>
-                    <td width="20%">{{ $task['content'] }}</td>
-            		<td width="20%">{{ $task['deadline'] }}</td>
-            		<td width="5%">{{ $task['status'] }}</td>
-                    <td width="10%"><a href="{{ route('taskcpl', $task['id']) }}" class="btn btn-success">Hoàn Thành</a></td>
-                    <td>
-	                    <form action="{{ route('tasks.destroy', $task['id']) }}" method="POST">
-						    @method('DELETE')
-						    @csrf
-						    <button width="10%" class="btn btn-danger">Xóa</button>
-						</form>
-					</td>
-            		{{-- <td width="10%"><a href="{{ route('tasks2.destroy', $task['id']) }}" class="btn btn-danger">Xóa</a></td> --}}
-            	</tr>
-            	@endforeach
-            </tbody>
-        </table>
-	</div>
+<body id="app-layout">
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+
+            <!-- Branding Image -->
+            <a class="navbar-brand" href="{{ url('/') }}">
+                Danh sách công việc
+            </a>
+        </div>
+
+    </div>
+</nav>
+
+<div class="container">
+    <div class="col-sm-offset-2 col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Thêm công việc mới
+            </div>
+
+            <div class="panel-body">
+                <!-- Display Validation Errors -->
+
+            <!-- New Task Form -->
+                <form action="{{ route('tasks.create')}}" method="POST" class="form-horizontal">
+                {{ csrf_field() }}
+                @method('GET')
+                <!-- Task Name -->
+                    <div class="form-group">
+                        <label for="task-name" class="col-sm-3 control-label">Tên công việc</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" name="name" id="task-name" class="form-control" value="{{ old('tasks') }}">
+                        </div>
+                    </div>
+
+                    <!-- Add Task Button -->
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-6">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fa fa-btn fa-plus"></i>Thêm công việc
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @if (isset($_COOKIE["msg"])) 
+            <div class="alert alert-success" role="alert">
+                <strong>Success !!!</strong>
+                {{
+                    $_COOKIE["msg"] 
+                }}
+            </div>
+        @endif
+        <!-- Current Tasks -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Danh sách công việc hiện tại
+            </div>
+
+            <div class="panel-body">
+                <table class="table table-striped task-table">
+                    <thead>
+                    <th>Tên công việc</th>
+                    <th>&nbsp;</th>
+                    </thead>
+                    <tbody>
+                     @foreach ($tasks as $task)
+                        <tr>
+                            <td class="table-text"><div>{{ $task['name'] }}</div></td>
+                            <!-- Task Complete Button -->
+                            <td>
+                                @if ($task['status'] == 1)
+                                    <a href="{{ route('taskcpl', $task['id']) }}" class="btn btn-success"><i class="fa fa-btn fa-check"></i>Hoàn Thành
+                                @elseif ($task['status'] == 2)
+                                    <a href="{{ route('taskrpl', $task['id']) }}" class="btn btn-warning"><i class="fa fa-refresh" aria-hidden="true"></i> Làm Lại
+                                @endif
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('tasks.edit' , $task['id']) }}" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-check"></i>Edit
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('tasks.show' , $task['id']) }}" class="btn btn-success">
+                                    <i class="fa fa-btn fa-check"></i>Show
+                                </a>
+                            </td>
+                            <!-- Task Delete Button -->
+                            <td>
+                                <form action="{{ route('tasks.destroy' , $task['id']) }}" method="POST">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fa fa-btn fa-trash"></i>Xoá
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 </body>
 </html>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
